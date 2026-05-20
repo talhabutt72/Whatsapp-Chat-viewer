@@ -119,7 +119,6 @@ def parse_whatsapp_datetime(date_str, time_str):
         except:
             continue
     return None
-
 @st.cache_data(show_spinner="Reading your chat... 💌")
 def load_chat_from_file():
     if not os.path.exists(CHAT_FILE):
