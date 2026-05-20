@@ -11,7 +11,7 @@ st.set_page_config(page_title="💌 Our Chat Memories", page_icon="💌",
                    layout="wide", initial_sidebar_state="expanded")
 
 # ── CONFIG ─────────────────────────────────────────────────────────────────────
-CHAT_FILE = "chat.txt"
+CHAT_FILE = "chats.txt"
 DATA_FILE = "memories_data.json"
 APP_PASS  = "Guggu"
 
