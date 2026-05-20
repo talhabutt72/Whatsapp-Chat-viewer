@@ -92,13 +92,19 @@ def parse_whatsapp_datetime(date_str, time_str):
     time_str = time_str.strip().upper()
     time_str = re.sub(r'\.', '', time_str)
     if 'AM' not in time_str and 'PM' not in time_str:
-        # assume 24h format, nothing to change
         pass
     else:
-        # ensure space before AM/PM
         time_str = re.sub(r'([0-9])(AM|PM)', r'\1 \2', time_str)
-    date_formats = ["%d/%m/%Y","%d/%m/%y","%m/%d/%Y","%m/%d/%y","%Y-%m-%d","%d-%m-%Y","%d-%m-%y"]
-    time_formats = ["%H:%M","%H:%M:%S","%I:%M %p","%I:%M:%S %p","%I:%M%p","%I:%M:%S%p"]
+    date_formats = [
+        "%d/%m/%Y", "%d/%m/%y", "%m/%d/%Y", "%m/%d/%y",
+        "%Y-%m-%d", "%d-%m-%Y", "%d-%m-%y", "%Y/%m/%d",
+        "%d.%m.%Y", "%d.%m.%y"
+    ]
+    time_formats = [
+        "%H:%M", "%H:%M:%S", "%I:%M %p", "%I:%M:%S %p",
+        "%I:%M%p", "%I:%M:%S%p", "%H.%M", "%H.%M.%S",
+        "%I.%M %p", "%I.%M.%S %p"
+    ]
     for df in date_formats:
         for tf in time_formats:
             combined = f"{date_str} {time_str}"
@@ -106,6 +112,12 @@ def parse_whatsapp_datetime(date_str, time_str):
                 return datetime.strptime(combined, f"{df} {tf}")
             except:
                 continue
+    # Try date-only (for lines that have no time, though rare)
+    for df in date_formats:
+        try:
+            return datetime.strptime(date_str, df)
+        except:
+            continue
     return None
 
 @st.cache_data(show_spinner="Reading your chat... 💌")
